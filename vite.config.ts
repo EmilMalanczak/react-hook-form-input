@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "node:path";
 import pkg from "./package.json";
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
   build: {
@@ -18,6 +19,13 @@ export default defineConfig({
         },
       },
     },
+    //Generates sourcemaps for the built files,
+    //aiding in debugging.
+    sourcemap: true,
+    //Clears the output directory before building.
+    emptyOutDir: true,
   },
-  plugins: [react()],
+
+  //dts() generates TypeScript declaration files (*.d.ts)
+  plugins: [react(), dts()],
 });
