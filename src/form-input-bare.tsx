@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import {
-  forwardRef,
-  type ComponentPropsWithRef,
-  type ElementType,
-  type PropsWithChildren,
-  type ComponentPropsWithoutRef,
-  type ReactElement
+import { forwardRef } from "react"
+
+import type {
+  ComponentPropsWithRef,
+  ElementType,
+  PropsWithChildren,
+  ComponentPropsWithoutRef,
+  ReactElement
 } from "react"
+import type { FieldValues, Control } from "react-hook-form"
 
 type PolymorphicProp<Input extends ElementType> = {
   input?: Input
@@ -36,7 +38,7 @@ export type PolymorphicRef<Input extends ElementType> =
 /**
  * This is the internal props for the component
  */
-type FormInputInternalOwnProps = {
+type FormInputInternalOwnProps<Form extends FieldValues> = {
   /** 
         @string name of the field in form
       */
@@ -44,7 +46,7 @@ type FormInputInternalOwnProps = {
   /** 
        @object control object from useForm hook 
      */
-  control: string
+  control: Control<Form>
   /** 
       @string optional field from form fields to display error message
     */
@@ -62,19 +64,24 @@ type FormInputInternalOwnProps = {
 /**
  * This is the updated component props using PolymorphicComponentPropWithRef
  */
-export type FormInputProps<Input extends ElementType> =
-  PolymorphicComponentPropWithRef<Input, FormInputInternalOwnProps>
+export type FormInputProps<
+  Form extends FieldValues,
+  Input extends ElementType
+> = PolymorphicComponentPropWithRef<Input, FormInputInternalOwnProps<Form>>
 
 /**
  * This is the type used in the type annotation for the component
  */
-type FormInputBareComponent = <Input extends ElementType = "span">(
-  props: FormInputProps<Input>
+type FormInputBareComponent = <
+  Form extends FieldValues,
+  Input extends ElementType = "span"
+>(
+  props: FormInputProps<Form, Input>
 ) => ReactElement
 
 export const FormInputBare = forwardRef(
-  <Input extends ElementType = "span">(
-    { input, control, ...rest }: FormInputProps<Input>,
+  <Form extends FieldValues, Input extends ElementType = "span">(
+    { input, control, ...rest }: FormInputProps<Form, Input>,
     ref?: PolymorphicRef<Input>
   ) => {
     const InputComponent = input || "span"

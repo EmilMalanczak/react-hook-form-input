@@ -1,19 +1,21 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { forwardRef, type ElementType, type ReactElement } from "react"
 
-import {
-  FormInputBare,
-  type PolymorphicRef,
-  type FormInputProps
-} from "./form-input-bare"
+import type { FormInputProps, PolymorphicRef } from "./form-input-bare"
+import type { FieldValues } from "react-hook-form"
 
-type FormInputComponent = <Input extends ElementType = "span">(
-  props: Omit<FormInputProps<Input>, "control">
+import { FormInputBare } from "./form-input-bare"
+
+type FormInputComponent = <
+  Form extends FieldValues,
+  Input extends ElementType = "span"
+>(
+  props: Omit<FormInputProps<Form, Input>, "control">
 ) => ReactElement
 
 export const FormInput = forwardRef(
-  <Input extends ElementType = "span">(
-    props: FormInputProps<Input>,
+  <Form extends FieldValues, Input extends ElementType = "span">(
+    props: FormInputProps<Form, Input>,
     ref?: PolymorphicRef<Input>
   ) => {
     return <FormInputBare {...props} control="control" ref={ref} />
