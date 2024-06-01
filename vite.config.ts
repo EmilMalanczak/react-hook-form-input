@@ -1,31 +1,32 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import path from "node:path";
-import pkg from "./package.json";
-import dts from "vite-plugin-dts";
+import react from "@vitejs/plugin-react-swc"
+import path from "node:path"
+import { defineConfig } from "vite"
+import dts from "vite-plugin-dts"
+
+import pkg from "./package.json"
 
 export default defineConfig({
   build: {
     lib: {
       entry: path.resolve("src", "src/index.jsx"),
       name: pkg.name,
-      fileName: (format) => `${pkg.name}.${format}.js`,
+      fileName: (format) => `${pkg.name}.${format}.js`
     },
     rollupOptions: {
       external: ["react", "react-dom"],
       output: {
         globals: {
-          react: "React",
-        },
-      },
+          react: "React"
+        }
+      }
     },
     //Generates sourcemaps for the built files,
     //aiding in debugging.
     sourcemap: true,
     //Clears the output directory before building.
-    emptyOutDir: true,
+    emptyOutDir: true
   },
 
   //dts() generates TypeScript declaration files (*.d.ts)
-  plugins: [react(), dts()],
-});
+  plugins: [react(), dts()]
+})
