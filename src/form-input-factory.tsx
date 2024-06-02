@@ -4,7 +4,7 @@ import type { FieldValues } from "react-hook-form"
 import { FormInput } from "./form-input"
 import { FormInputBare, type FormInputProps } from "./form-input-bare"
 
-type FormInputFactory<Type extends "bare" | "context" = "bare"> = <
+type FormInputFactory<Type extends "bare" | "context" = "context"> = <
   Input extends ElementType = "input"
 >(
   input: Input
@@ -15,17 +15,17 @@ type FormInputFactory<Type extends "bare" | "context" = "bare"> = <
   >
 ) => JSX.Element
 
-export const createFormInputBare: FormInputFactory = (input) => (props) => (
-  <FormInputBare
-    input={input}
-    {...(props as FormInputProps<FieldValues, typeof input>)}
-  />
-)
-
-export const createFormInput: FormInputFactory<"context"> =
+export const createFormInputBare: FormInputFactory<"bare"> =
   (input) => (props) => (
-    <FormInput
+    <FormInputBare
       input={input}
       {...(props as FormInputProps<FieldValues, typeof input>)}
     />
   )
+
+export const createFormInput: FormInputFactory = (input) => (props) => (
+  <FormInput
+    input={input}
+    {...(props as FormInputProps<FieldValues, typeof input>)}
+  />
+)
