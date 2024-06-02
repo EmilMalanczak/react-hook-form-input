@@ -8,12 +8,12 @@ import pkg from "./package.json"
 export default defineConfig({
   build: {
     lib: {
-      entry: path.resolve("src", "src/index.jsx"),
+      entry: path.resolve("src", "index.ts"),
       name: pkg.name,
-      fileName: (format) => `${pkg.name}.${format}.js`
+      fileName: (format) => `index.${format}.js`
     },
     rollupOptions: {
-      external: ["react", "react-dom"],
+      external: ["react", "react-dom", "react-hook-form"],
       output: {
         globals: {
           react: "React"
