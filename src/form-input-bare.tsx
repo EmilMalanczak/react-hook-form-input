@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import { forwardRef } from "react"
 import { useController } from "react-hook-form"
 
@@ -21,6 +20,11 @@ import { getErrorMessage } from "./helpers/get-error-message"
 import { mergeRefs } from "./helpers/merge-refs"
 
 // NOTE: ElementType accept object with minimal props to pass
+
+// https://github.com/sindresorhus/type-fest/blob/main/source/empty-object.d.ts
+// When you annotate something as the type `{}`, it can be anything except `null` and `undefined`. This means that you cannot use `{}` to represent an empty plain object ([read more](https://stackoverflow.com/questions/47339869/typescript-empty-object-and-any-difference/52193484#52193484)).
+declare const emptyObjectSymbol: unique symbol
+export type EmptyObject = { [emptyObjectSymbol]?: never }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RequiredFormInputComponentProps = any
@@ -72,19 +76,19 @@ export type FormInputComponentProps<Form extends FieldValues> =
   }
 
 type PropsToOmit<C extends AllowedElement, P> = keyof (PolymorphicProp<C> & P) &
-  keyof FormInputInternalOwnProps<{}>
+  keyof FormInputInternalOwnProps<EmptyObject>
 
 // This is the first reusable type utility we built
 type PolymorphicComponentProp<
   Input extends AllowedElement,
-  Props = {}
+  Props = EmptyObject
 > = PropsWithChildren<Props & PolymorphicProp<Input>> &
   Omit<ComponentPropsWithoutRef<Input>, PropsToOmit<Input, Props>>
 
 // This is a new type utitlity with ref!
 type PolymorphicComponentPropWithRef<
   Input extends AllowedElement,
-  Props = {}
+  Props = EmptyObject
 > = PolymorphicComponentProp<Input, Props> & {
   ref?: PolymorphicRef<Input>
 }
