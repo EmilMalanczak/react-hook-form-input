@@ -54,15 +54,14 @@ type FormInputInternalOwnProps<Form extends FieldValues> = {
        @string in case your component uses different key than onChange  
      */
   onChangeKey?: string
+  onBlurKey?: string
 }
 
-export type FormInputComponentProps<Form extends FieldValues> = UseControllerReturn<
-  Form,
-  Path<Form>
-> & {
-  error?: string
-  name: string
-}
+export type FormInputComponentProps<Form extends FieldValues> =
+  UseControllerReturn<Form, Path<Form>> & {
+    error?: string
+    name: string
+  }
 
 type PropsToOmit<C extends ElementType, P> = keyof (PolymorphicProp<C> & P) &
   keyof FormInputInternalOwnProps<{}>
@@ -112,9 +111,11 @@ export const FormInputBare = forwardRef(
       name,
       control,
       onChange: onInputComponentChange,
+      onBlur: onInputComponentBlur,
       debug = false,
       alternativeErrorKeys,
       onChangeKey = "onChange",
+      onBlurKey = "onBlur",
       ...rest
     }: FormInputProps<Form, Input>,
     ref?: PolymorphicRef<Input>
@@ -125,7 +126,7 @@ export const FormInputBare = forwardRef(
     })
     const { field } = controller
 
-    const { onChange, ref: hookFormRef, value } = field
+    const { onChange, onBlur, ref: hookFormRef, value } = field
 
     const error = getErrorFromController(controller, alternativeErrorKeys)
 
@@ -135,6 +136,7 @@ export const FormInputBare = forwardRef(
       <InputComponent
         {...rest}
         ref={mergeRefs(hookFormRef, ref)}
+        {...rest}
         {...{
           [valueKey]: value,
           name,
@@ -164,9 +166,14 @@ export const FormInputBare = forwardRef(
               )
             }
           },
+          // NOTE: don't know how to type this properly but types are correct in the end
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          [onBlurKey]: (...values: any[]) => {
+            onBlur()
+            onInputComponentBlur?.(...values)
+          },
           ...controller
         }}
-        {...rest}
       />
     )
   }
