@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { forwardRef } from "react"
+import { useController } from "react-hook-form"
 
 import type {
   ComponentPropsWithRef,
@@ -8,13 +9,50 @@ import type {
   ComponentPropsWithoutRef,
   ReactElement
 } from "react"
-import type { FieldValues, Control } from "react-hook-form"
+import type { FieldValues, Control, Path } from "react-hook-form"
+
+import { getErrorFromController } from "./helpers/get-error-from-controller"
+import { getErrorMessage } from "./helpers/get-error-message"
+import { mergeRefs } from "./helpers/merge-refs"
+
+// NOTE: ElementType accept object with minimal props to pass
 
 type PolymorphicProp<Input extends ElementType> = {
   input?: Input
 }
 
-type PropsToOmit<C extends ElementType, P> = keyof (PolymorphicProp<C> & P)
+/**
+ * This is the internal props for the component
+ */
+type FormInputInternalOwnProps<Form extends FieldValues> = {
+  /** 
+        @string name of the field in form
+      */
+  name: Path<Form>
+  /** 
+       @object control object from useForm hook 
+     */
+  control: Control<Form>
+  /** 
+      @string optional field from form fields to display error message
+    */
+  alternativeErrorKeys?: Path<Form>[]
+  /** 
+      @boolean if true will log to console input changes with detailed information
+    */
+  debug?: boolean
+  /** 
+      @string in case your component uses different key than value eg. "checked" for checkbox
+    */
+  valueKey?: string
+  /** 
+       @string in case your component uses different key than onChange  
+     */
+  onChangeKey?: string
+}
+
+type PropsToOmit<C extends ElementType, P> = keyof (PolymorphicProp<C> & P) &
+  keyof FormInputInternalOwnProps<{}>
 
 // This is the first reusable type utility we built
 type PolymorphicComponentProp<
@@ -36,32 +74,6 @@ export type PolymorphicRef<Input extends ElementType> =
   ComponentPropsWithRef<Input>["ref"]
 
 /**
- * This is the internal props for the component
- */
-type FormInputInternalOwnProps<Form extends FieldValues> = {
-  /** 
-        @string name of the field in form
-      */
-  name: string
-  /** 
-       @object control object from useForm hook 
-     */
-  control: Control<Form>
-  /** 
-      @string optional field from form fields to display error message
-    */
-  additionalErrorKey?: string
-  /** 
-      @boolean if true will log to console input changes with detailed informations
-    */
-  debug?: boolean
-  /** 
-      @string in case you want to use different key than value to pass value to component 
-    */
-  valueKey?: string
-}
-
-/**
  * This is the updated component props using PolymorphicComponentPropWithRef
  */
 export type FormInputProps<
@@ -74,19 +86,74 @@ export type FormInputProps<
  */
 type FormInputBareComponent = <
   Form extends FieldValues,
-  Input extends ElementType = "span"
+  Input extends ElementType = "input"
 >(
   props: FormInputProps<Form, Input>
 ) => ReactElement
 
 export const FormInputBare = forwardRef(
-  <Form extends FieldValues, Input extends ElementType = "span">(
-    { input, control, ...rest }: FormInputProps<Form, Input>,
+  <Form extends FieldValues, Input extends ElementType = "input">(
+    {
+      input,
+      valueKey = "value",
+      name,
+      control,
+      onChange: onInputComponentChange,
+      debug = false,
+      alternativeErrorKeys,
+      onChangeKey = "onChange",
+      ...rest
+    }: FormInputProps<Form, Input>,
     ref?: PolymorphicRef<Input>
   ) => {
-    const InputComponent = input || "span"
-    console.log("control", control)
+    const controller = useController<Form>({
+      name,
+      control
+    })
+    const { field } = controller
 
-    return <InputComponent {...rest} ref={ref} />
+    const { onChange, ref: hookFormRef, value } = field
+
+    const error = getErrorFromController(controller, alternativeErrorKeys)
+
+    const InputComponent = input || "input"
+
+    return (
+      <InputComponent
+        {...rest}
+        ref={mergeRefs(hookFormRef, ref)}
+        {...{
+          [valueKey]: value,
+          error: error ? getErrorMessage(error) : undefined,
+          // NOTE: don't know how to type this properly but types are correct in the end
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          [onChangeKey]: (...values: any[]) => {
+            onChange(...values)
+            onInputComponentChange?.(...values)
+
+            // TODO: unsure if this is needed
+            // if (getNestedValue(touchedFields, name) || Boolean(error)) {
+            //   trigger(name);
+            // }
+
+            if (debug) {
+              console.info(
+                `%cForm input onChange`,
+                "color: #7b7bed; display: block; width: 100%; margin-bottom: 8px;",
+                `\ninput name: ${name}`,
+                {
+                  values,
+                  name,
+                  error,
+                  field
+                }
+              )
+            }
+          },
+          ...controller
+        }}
+        {...rest}
+      />
+    )
   }
 ) as FormInputBareComponent
