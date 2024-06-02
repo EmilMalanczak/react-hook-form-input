@@ -9,7 +9,12 @@ import type {
   ComponentPropsWithoutRef,
   ReactElement
 } from "react"
-import type { FieldValues, Control, Path } from "react-hook-form"
+import type {
+  FieldValues,
+  Control,
+  Path,
+  UseControllerReturn
+} from "react-hook-form"
 
 import { getErrorFromController } from "./helpers/get-error-from-controller"
 import { getErrorMessage } from "./helpers/get-error-message"
@@ -49,6 +54,14 @@ type FormInputInternalOwnProps<Form extends FieldValues> = {
        @string in case your component uses different key than onChange  
      */
   onChangeKey?: string
+}
+
+export type FormInputComponentProps<Form extends FieldValues> = UseControllerReturn<
+  Form,
+  Path<Form>
+> & {
+  error?: string
+  name: string
 }
 
 type PropsToOmit<C extends ElementType, P> = keyof (PolymorphicProp<C> & P) &
@@ -124,6 +137,7 @@ export const FormInputBare = forwardRef(
         ref={mergeRefs(hookFormRef, ref)}
         {...{
           [valueKey]: value,
+          name,
           error: error ? getErrorMessage(error) : undefined,
           // NOTE: don't know how to type this properly but types are correct in the end
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
