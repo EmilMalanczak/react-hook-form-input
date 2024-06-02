@@ -15,11 +15,18 @@ type FormInputComponent = <
 
 export const FormInput = forwardRef(
   <Form extends FieldValues, Input extends ElementType = "input">(
-    props: FormInputProps<Form, Input>,
+    props: Omit<FormInputProps<Form, Input>, "control">,
     ref?: PolymorphicRef<Input>
   ) => {
     const { control } = useFormContext<Form>()
 
-    return <FormInputBare {...props} control={control} ref={ref} />
+    // NOTE: Seems like typescript doesn't like this due to Omit
+    return (
+      <FormInputBare
+        {...(props as FormInputProps<Form, Input>)}
+        control={control}
+        ref={ref}
+      />
+    )
   }
 ) as FormInputComponent
