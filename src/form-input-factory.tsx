@@ -1,11 +1,14 @@
-import type { ElementType } from "react"
 import type { FieldValues } from "react-hook-form"
 
 import { FormInput } from "./form-input"
-import { FormInputBare, type FormInputProps } from "./form-input-bare"
+import {
+  AllowedElement,
+  FormInputBare,
+  type FormInputProps
+} from "./form-input-bare"
 
 type FormInputFactory<Type extends "bare" | "context" = "context"> = <
-  Input extends ElementType = "input"
+  Input extends AllowedElement = "input"
 >(
   input: Input
 ) => <Form extends FieldValues>(

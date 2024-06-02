@@ -22,6 +22,14 @@ import { mergeRefs } from "./helpers/merge-refs"
 
 // NOTE: ElementType accept object with minimal props to pass
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RequiredFormInputComponentProps = any
+
+export type AllowedElement = ElementType<
+  RequiredFormInputComponentProps,
+  "input" | "select" | "textarea"
+>
+
 type PolymorphicProp<Input extends ElementType> = {
   input?: Input
 }
@@ -63,26 +71,26 @@ export type FormInputComponentProps<Form extends FieldValues> =
     name: string
   }
 
-type PropsToOmit<C extends ElementType, P> = keyof (PolymorphicProp<C> & P) &
+type PropsToOmit<C extends AllowedElement, P> = keyof (PolymorphicProp<C> & P) &
   keyof FormInputInternalOwnProps<{}>
 
 // This is the first reusable type utility we built
 type PolymorphicComponentProp<
-  Input extends ElementType,
+  Input extends AllowedElement,
   Props = {}
 > = PropsWithChildren<Props & PolymorphicProp<Input>> &
   Omit<ComponentPropsWithoutRef<Input>, PropsToOmit<Input, Props>>
 
 // This is a new type utitlity with ref!
 type PolymorphicComponentPropWithRef<
-  Input extends ElementType,
+  Input extends AllowedElement,
   Props = {}
 > = PolymorphicComponentProp<Input, Props> & {
   ref?: PolymorphicRef<Input>
 }
 
 // This is the type for the "ref" only
-export type PolymorphicRef<Input extends ElementType> =
+export type PolymorphicRef<Input extends AllowedElement> =
   ComponentPropsWithRef<Input>["ref"]
 
 /**
@@ -90,7 +98,7 @@ export type PolymorphicRef<Input extends ElementType> =
  */
 export type FormInputProps<
   Form extends FieldValues,
-  Input extends ElementType
+  Input extends AllowedElement
 > = PolymorphicComponentPropWithRef<Input, FormInputInternalOwnProps<Form>>
 
 /**
@@ -98,13 +106,13 @@ export type FormInputProps<
  */
 type FormInputBareComponent = <
   Form extends FieldValues,
-  Input extends ElementType = "input"
+  Input extends AllowedElement = "input"
 >(
   props: FormInputProps<Form, Input>
 ) => ReactElement
 
 export const FormInputBare = forwardRef(
-  <Form extends FieldValues, Input extends ElementType = "input">(
+  <Form extends FieldValues, Input extends AllowedElement = "input">(
     {
       input,
       valueKey = "value",
