@@ -6,28 +6,28 @@ type GetIndexedField<T, K> = K extends keyof T
       : number extends keyof T
         ? T[number]
         : undefined
-    : undefined
+    : undefined;
 
 type FieldWithPossiblyUndefined<T, Key> =
   | GFT<Exclude<T, undefined>, Key>
-  | Extract<T, undefined>
+  | Extract<T, undefined>;
 
 type IndexedFieldWithPossiblyUndefined<T, Key> =
   | GetIndexedField<Exclude<T, undefined>, Key>
-  | Extract<T, undefined>
+  | Extract<T, undefined>;
 
 type RR<Rest extends string, Right extends string> = Rest extends ""
   ? Right
-  : `${Rest}.${Right}`
+  : `${Rest}.${Right}`;
 
 type FieldIndex<
   O,
   FieldKey extends string,
   Index extends string,
-  Rest extends string
+  Rest extends string,
 > = FieldKey extends keyof O
   ? FieldWithPossiblyUndefined<O[FieldKey], `[${Index}]${Rest}`>
-  : undefined
+  : undefined;
 
 type GFT<O, K> = K extends keyof O
   ? O[K]
@@ -53,22 +53,22 @@ type GFT<O, K> = K extends keyof O
         : undefined
       : K extends `${infer FieldKey}[${infer Index}]${infer Rest}`
         ? FieldIndex<O, FieldKey, Index, Rest>
-        : undefined
+        : undefined;
 
 export function getNestedValue<
   TData,
   TPath extends string,
-  TDefault = GFT<TData, TPath>
+  TDefault = GFT<TData, TPath>,
 >(
   data: TData,
   path: TPath,
-  defaultValue?: TDefault
+  defaultValue?: TDefault,
 ): GFT<TData, TPath> | TDefault {
   const value = path
     .split(/[.[\]]/)
     .filter(Boolean)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .reduce<GFT<TData, TPath>>((val, key) => (val as any)?.[key], data as any)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+    .reduce<GFT<TData, TPath>>((val, key) => (val as any)?.[key], data as any);
 
-  return value !== undefined ? value : (defaultValue as TDefault)
+  return value ?? (defaultValue as TDefault);
 }

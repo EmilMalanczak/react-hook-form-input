@@ -26,6 +26,7 @@ import { mergeRefs } from "./helpers/merge-refs";
 declare const emptyObjectSymbol: unique symbol;
 export type EmptyObject = { [emptyObjectSymbol]?: never };
 
+// TODO: add minimal props
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RequiredFormInputComponentProps = any;
 
@@ -87,14 +88,12 @@ export type FormInputComponentProps<Form extends FieldValues> =
 type PropsToOmit<C extends AllowedElement, P> = keyof (PolymorphicProp<C> & P) &
   keyof FormInputInternalOwnProps<EmptyObject>;
 
-// This is the first reusable type utility we built
 type PolymorphicComponentProp<
   Input extends AllowedElement,
   Props = EmptyObject,
 > = PropsWithChildren<Props & PolymorphicProp<Input>> &
   Omit<ComponentPropsWithoutRef<Input>, PropsToOmit<Input, Props>>;
 
-// This is a new type utitlity with ref!
 type PolymorphicComponentPropWithRef<
   Input extends AllowedElement,
   Props = EmptyObject,
@@ -106,9 +105,6 @@ type PolymorphicComponentPropWithRef<
 export type PolymorphicRef<Input extends AllowedElement> =
   ComponentPropsWithRef<Input>["ref"];
 
-/**
- * This is the updated component props using PolymorphicComponentPropWithRef
- */
 export type FormInputProps<
   Form extends FieldValues,
   Input extends AllowedElement,
@@ -197,6 +193,6 @@ export const FormInputBare = forwardRef(
       />
     );
   },
-) as FormInputBareComponent & FC
+) as FormInputBareComponent & FC;
 
 FormInputBare.displayName = "FormInputBare";

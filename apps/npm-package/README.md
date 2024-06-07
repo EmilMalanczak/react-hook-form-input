@@ -42,9 +42,9 @@ Input component passed to the `FormInput` always receive extra props of type:
 ```ts
 export type FormInputComponentProps<Form extends FieldValues> =
   UseControllerReturn<Form, Path<Form>> & {
-    error?: string // error for particular field, including any of alternativeKeys
-    name: string // a path passed as a prop
-  }
+    error?: string; // error for particular field, including any of alternativeKeys
+    name: string; // a path passed as a prop
+  };
 ```
 
 ---
@@ -56,7 +56,7 @@ const TextInput = (
   /* some code */
 
   <FormInput name="field.inside.form" input={TextInput} />
-)
+);
 ```
 
 Each of component has its _factory function_ which allows you to reexport `FormInput` variant with **_predefined input_** prop eg.:
@@ -125,7 +125,7 @@ And additional props supported by the specified input component.
 re-export of `FormInputBare` with predefined `control` props
 
 ```ts
-Omit<FormInputBareProps, "control">
+Omit<FormInputBareProps, "control">;
 ```
 
 ---

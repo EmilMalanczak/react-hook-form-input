@@ -27,4 +27,3 @@
   "include": ["src", "./index.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
-    

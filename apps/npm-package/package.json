@@ -32,7 +32,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf .turbo node_modules"
   },
   "peerDependencies": {
     "react": "^18.2.0",
@@ -55,7 +58,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
     "turbo": "^2.0.1",
-    "typescript": "^5.2.2",
+    "typescript": "^5.3.3",
     "vite": "^5.2.0",
     "vite-plugin-dts": "^3.9.1",
     "@rhfi/eslint-config": "workspace:^0.1.0",
@@ -73,6 +76,12 @@
     "extends": [
       "@rhfi/eslint-config",
       "@rhfi/eslint-config/react"
+    ],
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
+    "ignorePatterns": [
+      "vite.config.ts"
     ]
   },
   "prettier": "@rhfi/prettier-config"

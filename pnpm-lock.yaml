@@ -6,7 +6,11 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    devDependencies:
+      turbo:
+        specifier: ^2.0.1
+        version: 2.0.1
 
   apps/npm-package:
     dependencies:
@@ -78,7 +82,7 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1
       typescript:
-        specifier: ^5.2.2
+        specifier: ^5.3.3
         version: 5.4.5
       vite:
         specifier: ^5.2.0
@@ -90,10 +94,10 @@ importers:
   tooling/eslint-config:
     dependencies:
       '@typescript-eslint/eslint-plugin':
-        specifier: ^7.0.2
+        specifier: ^7.2.0
         version: 7.12.0(@typescript-eslint/parser@7.12.0)(eslint@8.57.0)(typescript@5.4.5)
       '@typescript-eslint/parser':
-        specifier: ^7.0.2
+        specifier: ^7.2.0
         version: 7.12.0(eslint@8.57.0)(typescript@5.4.5)
       eslint-config-turbo:
         specifier: ^1.12.4
@@ -118,10 +122,10 @@ importers:
         specifier: workspace:^0.1.0
         version: link:../ts-config
       '@types/eslint':
-        specifier: ^8.56.2
+        specifier: ^8.56.10
         version: 8.56.10
       eslint:
-        specifier: ^8.56.0
+        specifier: ^8.57.0
         version: 8.57.0
       prettier:
         specifier: ^3.2.5
