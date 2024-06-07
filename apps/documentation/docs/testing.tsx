@@ -1,36 +1,37 @@
-import { TextInput, Checkbox, CheckboxGroup, Group } from "@mantine/core"
-import { useRef } from "react"
-import { ControllerFieldState, useForm } from "react-hook-form"
+import type { ControllerFieldState } from "react-hook-form";
+import { useRef } from "react";
+import { Checkbox, Group, TextInput } from "@mantine/core";
+import { useForm } from "react-hook-form";
 
-import { FormInput } from "../form-input"
-import { FormInputBare } from "../form-input-bare"
-import { createFormInput } from "../form-input-factory"
+import { FormInput } from "../../npm-package/src/form-input";
+import { FormInputBare } from "../../npm-package/src/form-input-bare";
+import { createFormInput } from "../../npm-package/src/form-input-factory";
 
 type TestProps = {
-  value?: number
-  onChange: (n: number) => void
-  fieldState?: ControllerFieldState
-  randomProp: string
-}
+  value?: number;
+  onChange: (n: number) => void;
+  fieldState?: ControllerFieldState;
+  randomProp: string;
+};
 
 type TestForm = {
-  name: string
-  password: string
+  name: string;
+  password: string;
   nest: {
-    test: string
-    x: string[]
-  }
-}
+    test: string;
+    x: string[];
+  };
+};
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TestInput = ({ value, fieldState, onChange, randomProp }: TestProps) => {
-  return <div>x</div>
-}
+  return <div>x</div>;
+};
 
-const MantineFormInput = createFormInput(TextInput)
-const MantineCheckboxGroupInput = createFormInput(Checkbox.Group)
+const MantineFormInput = createFormInput(TextInput);
+const MantineCheckboxGroupInput = createFormInput(Checkbox.Group);
 
 const Test = () => {
   const { control } = useForm<TestForm>({
@@ -39,20 +40,20 @@ const Test = () => {
       password: "password",
       nest: {
         test: "test",
-        x: ["string"]
-      }
-    }
-  })
-  const inputref = useRef<HTMLInputElement>(null)
+        x: ["string"],
+      },
+    },
+  });
+  const inputref = useRef<HTMLInputElement>(null);
 
   const x = () => {
-    inputref.current?.focus()
-  }
+    inputref.current?.focus();
+  };
 
   const onCheckboxChange = (values: string[]) => {
-    console.log(values)
+    console.log(values);
     // formData.setValue('roles', newValue ? [newValue] : []);
-  }
+  };
 
   return (
     <>
@@ -95,7 +96,7 @@ const Test = () => {
         control={control}
         mx={2}
         onChange={(e) => {
-          console.log(e)
+          console.log(e);
         }}
         ref={inputref}
         alternativeErrorKeys={["d"]}
@@ -119,18 +120,14 @@ const Test = () => {
       />
       <FormInput input="div" randomProp="s" name="name" />
 
-      <MantineFormInput<TestForm>
-        name="field.name"
-        mx={2}
-        ref={inputref}
-      />
-
+      <MantineFormInput<TestForm> name="field.name" mx={2} ref={inputref} />
       <FormInput<TestForm, typeof Checkbox.Group>
         input={Checkbox.Group}
         name="roles"
         label="label"
         required
-        onChange={onCheckboxChange}>
+        onChange={onCheckboxChange}
+      >
         <Group>
           <Checkbox value="ROLE_COMPANY_USER" label="PCF" />
           <Checkbox value="ROLE_GLOBAL_ADMIN" label="Admin" />
@@ -141,7 +138,8 @@ const Test = () => {
         name="roles"
         label="label"
         required
-        onChange={onCheckboxChange}>
+        onChange={onCheckboxChange}
+      >
         <Group>
           <Checkbox value="ROLE_COMPANY_USER" label="PCF" />
           <Checkbox value="ROLE_GLOBAL_ADMIN" label="Admin" />
@@ -160,7 +158,8 @@ const Test = () => {
               index > 2 && (
                 <ActionIcon
                   variant="transparent"
-                  onClick={() => openConfirmationModal(index)}>
+                  onClick={() => openConfirmationModal(index)}
+                >
                   <DeleteIcon size={16} />
                 </ActionIcon>
               )
@@ -197,8 +196,8 @@ const Test = () => {
             label: checkIsEmissionDictionaryTranslateKey(item.code)
               ? td(item.code)
               : item.name,
-            value: item.id.toString()
-          }
+            value: item.id.toString(),
+          };
         })}
       />
       <FormInput
@@ -212,5 +211,5 @@ const Test = () => {
       {/* date input.tsx */}
       {/* SupplyForm SearchSupplierField */}
     </>
-  )
-}
+  );
+};
