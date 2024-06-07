@@ -1,0 +1,11 @@
+{
+  "name": "@rhfi/ts-config",
+  "version": "0.1.0",
+  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "base.json"
+  ]
+}
