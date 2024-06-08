@@ -1,4 +1,4 @@
-{ 
+{
   "name": "rhfi",
   "version": "0.1.0",
   "private": true,
@@ -18,6 +18,9 @@
   "devDependencies": {
     "turbo": "^2.0.1"
   },
-  "packageManager": "pnpm@8.7.3"
+  "packageManager": "pnpm@8.7.3",
+  "volta": {
+    "node": "20.14.0",
+    "pnpm": "8.7.3"
+  }
 }
- 
