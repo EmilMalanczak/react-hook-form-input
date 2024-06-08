@@ -35,6 +35,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.3.1(react@18.3.1)
+      swizzle:
+        specifier: ^1.1.0
+        version: 1.1.0
     devDependencies:
       '@docusaurus/module-type-aliases':
         specifier: 3.4.0
@@ -9929,6 +9932,10 @@ packages:
       css-what: 6.1.0
       csso: 5.0.5
       picocolors: 1.0.1
+
+  /swizzle@1.1.0:
+    resolution: {integrity: sha512-L5wVfkVqNbYsz6xAPgPLo/ra7TyA+7nYvNm4i+LH6naTm8p7VKlVu/WmQWJ5yU03Gcabb34KfVppHcrGNdzi5Q==}
+    dev: false
 
   /tapable@1.1.3:
     resolution: {integrity: sha512-4WK/bYZmj8xLr+HUCODHGF1ZFzsYffasLUgEiMBY4fgtltdO6B4WJtlSbPaDTLpYTcGVwM2qLnFTICEcNxs3kA==}
