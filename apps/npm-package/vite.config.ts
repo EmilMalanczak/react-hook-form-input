@@ -29,4 +29,7 @@ export default defineConfig({
 
   //dts() generates TypeScript declaration files (*.d.ts)
   plugins: [react(), dts()],
+  server: {
+    port: 3003,
+  },
 });
