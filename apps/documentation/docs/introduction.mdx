@@ -1,0 +1,73 @@
+---
+slug: /
+sidebar_position: 1
+---
+
+import TabItem from "@theme/TabItem";
+import Tabs from "@theme/Tabs";
+
+# Introduction
+
+Typesafe and simple implementation of polymorphic _Smart component_ component for `react-hook-form` package.
+
+## Motivation
+
+If you are here I suppose you use `react-hook-form` to work with your forms. Have you heard about [Smart components](https://react-hook-form.com/advanced-usage#SmartFormComponent)? It's really cool approach - **_magic 🪄_** just happens.
+
+Main purpose of this project is to make this pattern easy to integrate with your current codebase by combining **_polymoprhic_** and **_Smart Component_** approaches.
+
+## Installation
+
+`react-hook-form-input` is available as an NPM package:
+
+<Tabs className="tabs">
+<TabItem value="pnpm">
+```bash
+pnpm add react-hook-form-input
+````
+</TabItem>
+<TabItem value="yarn">
+```bash
+yarn add react-hook-form-input
+````
+</TabItem>
+<TabItem value="npm">
+```bash
+npm install react-hook-form-input
+````
+</TabItem>
+
+</Tabs>
+
+:::info
+
+This package extension to `react-hook-form` so you need to have it pre-installed
+
+:::
+
+## Start coding 👨‍💻
+
+Bare minimum to start with!
+
+```tsx
+import { FormProvider, useForm } from "react-hook-form";
+import { FormInput } from "react-hook-form-input";
+
+const NameForm = () => {
+  const form = useForm();
+
+  const onSubmit = (values) => {
+    console.log(values);
+  };
+
+  return (
+    <FormProvider {...formData}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormInput name="username" />
+
+        <Button type="submit">Submit</Button>
+      </form>
+    </FormProvider>
+  );
+};
+```
