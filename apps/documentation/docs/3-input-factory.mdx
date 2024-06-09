@@ -1,0 +1,27 @@
+---
+sidebar_position: 3
+---
+
+# Input factory
+
+You might not want to pass `input` prop manually all the time over and over again.
+Especially when you work in larger projects with a lot of forms.
+Probably you have some kind of `Input` component that you use in your forms or that is coming from a UI library of your choice.
+
+This is why we have a factory function that allows you to create a new component with predefined `input` prop.
+
+## Usage
+
+```tsx
+import { createFormInput, createFormInputBare } from "react-hook-form-input";
+
+
+const TextInput = /* some code */
+
+const TextFormInput = createFormInput(TextInput)
+const TextFormInputBare = createFormInputBare(TextInput)
+```
+
+Each of factory functions accepts `input` component as a parameter and returns a `FormInput` component with predefined `input` prop.
+
+Rest of the API is the same as for `FormInput` and `FormInputBare` components.

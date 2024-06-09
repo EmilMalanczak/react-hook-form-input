@@ -1,0 +1,199 @@
+---
+toc_min_heading_level: 2
+toc_max_heading_level: 4
+---
+
+# `FormInputBare`
+
+This is a **generic** component so you can provide your own type for `Form` and `input` component props.
+In this variant the the `Form` type is beeing read base on the `control` prop so its not required to provide it.
+
+We get full type safety for the `input` component props and our field `name`.
+
+## Input props
+
+```ts
+{
+  /**
+   * The component used for the root node. Either a string to use a HTML element or a component.
+   */
+  input?: Input;
+  /**
+        @string name of the field in form
+      */
+  name: Path<Form>;
+  /**
+       @object control object from useForm hook
+     */
+  control: Control<Form>;
+  /**
+      @string optional field from form fields to display error message
+    */
+  alternativeErrorKeys?: Path<Form>[];
+  /**
+      @boolean if true will log to console input changes with detailed information
+    */
+  debug?: boolean;
+  /**
+      @string in case your component uses different key than value eg. "checked" for checkbox
+      @default "value"
+    */
+  valueKey?: string;
+  /**
+       @string in case your component uses different key than onChange
+       @default "onChange"
+     */
+  onChangeKey?: string;
+  /**
+      @string in case your component uses different key than onBlur
+      @default "onBlur"
+    */
+  onBlurKey?: string;
+};
+```
+
+And additional props supported by the specified `input` component.
+
+## Usage
+
+### Simple forms
+
+In the simplest form you can use it like this:
+
+```tsx
+import { useForm } from "react-hook-form";
+import { FormInputBare } from "react-hook-form-input";
+
+const NameForm = () => {
+  const form = useForm({
+    defaultValues: {
+      username: "",
+    },
+  });
+
+  const onSubmit = (values) => {
+    console.log(values);
+  };
+
+  return (
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      <FormInputBare name="username" control={form.control} />
+
+      <Button type="submit">Submit</Button>
+    </form>
+  );
+};
+```
+
+Everything works as expected but what will happen if we will provide wrong `name` prop?
+
+```tsx
+// This will error
+<FormInputBare name="" control={form.control} />
+// This will error <br />
+Type `""` is not assignable to type `"username"`
+```
+
+Isn't it cool? 🤩
+
+All the possible `name` paths are beeing read from the `control` object so you can't make a mistake here.
+
+### Advanced forms
+
+It even works with non-pritive data types like arrays or objects.
+
+#### Object
+
+```tsx
+
+  const form = useForm({
+    defaultValues: {
+      user: {
+        name: ''
+      },
+    },
+  });
+
+ return (
+    <form onSubmit={form.handleSubmit()}>
+        <FormInputBare name="user.name" control={form.control} />
+
+        <Button type="submit">Submit</Button>
+    </form>
+  );
+```
+
+After a change:
+
+```tsx
+// This will error
+<FormInputBare name="" control={form.control} />
+// This will error <br />
+Type `""` is not assignable to type `"user" | "user.name"`
+```
+
+#### Array
+
+```tsx
+
+  const form = useForm({
+    defaultValues: {
+      users: [
+        { name: '' }
+      ],
+    },
+  });
+
+ return (
+    <form onSubmit={form.handleSubmit()}>
+        <FormInputBare name="users[0].name" control={form.control} />
+
+        <Button type="submit">Submit</Button>
+    </form>
+  );
+```
+
+After a change:
+
+```tsx
+// This will error
+<FormInputBare name="" control={form.control} />
+// This will error <br />
+Type `""` is not assignable to type `"users" | "user.{number}" | "users.{number}.name"`
+```
+
+#### Custom input
+
+```tsx
+type TestInputProps = {
+  value?: number;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  randomProp: string;
+};
+
+const TestInput = ({ value, onChange, randomProp }: TestProps) => {
+  return <input value={value} onChange={onChange} />;
+};
+
+const Form = () => {
+  const form = useForm({
+    defaultValues: {
+      username: "",
+    },
+  });
+
+  return (
+    <form onSubmit={form.handleSubmit()}>
+      <FormInputBare input={TestInput} name="username" control={form.control} />
+
+      <Button type="submit">Submit</Button>
+    </form>
+  );
+};
+```
+
+:::warning
+
+Note that this will still produce an error because `TestInput` has required prop `randomProp` which is not provided.
+
+:::

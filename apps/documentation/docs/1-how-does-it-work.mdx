@@ -1,0 +1,51 @@
+---
+sidebar_position: 2
+---
+
+import TabItem from "@theme/TabItem";
+import Tabs from "@theme/Tabs";
+
+# How does it work?
+
+Theer are few things you need to know before you start using `react-hook-form-input`.
+
+## Input type
+
+To achieve maximum compatibility with UI libraries `FormInput` is making usage of **controlled** version of input via `useController` hook and/or\* `Context API` exposed by `react-hook-form`.
+
+As everything in apart of some pros there are also cons coming with each decision:
+
+Pros:
+
+- more flexible API
+- you can use **_any_** component that supports `value` and `onChange` props (or their equivalents) as `input` prop.
+
+Cons:
+
+- using `FormProvider` might lead to potential [performance issues](https://www.react-hook-form.com/advanced-usage/#FormProviderPerformance) in more complex forms due to more re-renders\*
+
+<p style={{ fontSize: 12, paddingTop: 18 }}>
+  ∗ - _depends on what variant of `FormInput` you are using_
+</p>
+
+## Smart & Polymorphic approach 🧠
+
+Have you heard about [Smart components](https://react-hook-form.com/advanced-usage#SmartFormComponent)?
+
+It's really cool approach - **_magic 🪄_** just happens.
+
+Main purpose of this project is to make this pattern easy to integrate with your current codebase by combining **_polymoprhic_** and **_Smart Component_** approaches.
+
+### Polymorphic components
+
+In a few words, it is a component that lets us specify which React element we want to use for its root. If you’ve used some UI library, such as [Mantine](https://mantine.dev/) or [Material UI](https://mui.com/material-ui/), you’ve already encountered a polymorphic component.
+
+### Smart components
+
+According to `react-hook-form` docs:
+
+_"This idea here is that you can easily compose your form with inputs."_
+
+However, it's not that easy to achieve in a real-world application. This package is here to help you with that.
+The [example from the docs](https://react-hook-form.com/advanced-usage#SmartFormComponent) is working perfectly fine but has some limitations eg. doesn't supports nested component fields.
+Another problem is lack of **typescript** support for `name` field which is really annoying.

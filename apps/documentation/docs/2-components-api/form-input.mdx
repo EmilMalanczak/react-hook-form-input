@@ -1,0 +1,79 @@
+# `FormInput`
+
+Make sure you have read the [FontInputBare API](/components-api/form-input-bare) before you start.
+
+Basically it's a re-export of `FormInputBare` with predefined `control` props by subscribing to the `FormProvider` context by `useFormContext` hook.
+
+`FormInput` share the same API as `FormInputBare` except the `control` prop which is omitted.
+
+## Input props
+
+```ts
+{
+  /**
+   * The component used for the root node. Either a string to use a HTML element or a component.
+   */
+  input?: Input;
+  /**
+        @string name of the field in form
+      */
+  name: Path<Form>;
+
+  /**
+      @string optional field from form fields to display error message
+    */
+  alternativeErrorKeys?: Path<Form>[];
+  /**
+      @boolean if true will log to console input changes with detailed information
+    */
+  debug?: boolean;
+  /**
+      @string in case your component uses different key than value eg. "checked" for checkbox
+      @default "value"
+    */
+  valueKey?: string;
+  /**
+       @string in case your component uses different key than onChange
+       @default "onChange"
+     */
+  onChangeKey?: string;
+  /**
+      @string in case your component uses different key than onBlur
+      @default "onBlur"
+    */
+  onBlurKey?: string;
+};
+```
+
+As a result of not providing `control` prop manually, you will lose type safety for the `name` prop.
+
+In order to get it back you have to pass a generic type to the component directly.
+
+## Usage
+
+### Minimum example
+
+```tsx
+type TestInputProps = {
+  value?: number;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  randomProp: string;
+};
+
+const TestInput = ({ value, onChange, randomProp }: TestProps) => {
+  return <input value={value} onChange={onChange} />;
+};
+
+// Usage
+<FormInput<TestForm, typeof TestInput>
+  input={TestInput}
+  randomProp="text"
+  name="nest"
+/>;
+```
+
+:::warning
+
+Unfortunately, TypeScript doesn't support partial type inference from generic type arguments. That's why you have to provide all of them.
+
+:::
