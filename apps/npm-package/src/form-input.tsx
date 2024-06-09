@@ -17,7 +17,7 @@ type FormInputComponent = <
   props: Omit<FormInputProps<Form, Input>, "control">,
 ) => ReactElement;
 
-export const FormInput = forwardRef(
+export const FormInputComponent = forwardRef(
   <Form extends FieldValues, Input extends AllowedElement = "input">(
     props: Omit<FormInputProps<Form, Input>, "control">,
     ref?: PolymorphicRef<Input>,
@@ -33,6 +33,8 @@ export const FormInput = forwardRef(
       />
     );
   },
-) as FormInputComponent & FC;
+);
 
-FormInput.displayName = "FormInput";
+FormInputComponent.displayName = "FormInput";
+
+export const FormInput = FormInputComponent as FormInputComponent

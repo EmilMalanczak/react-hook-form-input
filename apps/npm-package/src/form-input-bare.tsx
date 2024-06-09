@@ -35,6 +35,10 @@ export type AllowedElement = ElementType<
   "input" | "select" | "textarea"
 >;
 
+type Props = {
+  onChange?: (...args: unknown[]) => void;
+};
+
 type PolymorphicProp<Input extends ElementType> = {
   /**
    * The component used for the root node. Either a string to use a HTML element or a component.
@@ -85,14 +89,23 @@ export type FormInputComponentProps<Form extends FieldValues> =
     name: string;
   };
 
+type ControlledInputPropsKeys = "onChange" | "value";
+
 type PropsToOmit<C extends AllowedElement, P> = keyof (PolymorphicProp<C> & P) &
-  keyof FormInputInternalOwnProps<EmptyObject>;
+  keyof FormInputInternalOwnProps<EmptyObject> &
+  ("onChange" | "value");
 
 type PolymorphicComponentProp<
   Input extends AllowedElement,
   Props = EmptyObject,
-> = PropsWithChildren<Props & PolymorphicProp<Input>> &
-  Omit<ComponentPropsWithoutRef<Input>, PropsToOmit<Input, Props>>;
+> = Omit<
+  PropsWithChildren<Props & PolymorphicProp<Input>>,
+  ControlledInputPropsKeys
+> &
+  Omit<
+    ComponentPropsWithoutRef<Input>,
+    PropsToOmit<Input, Props> | ControlledInputPropsKeys
+  >;
 
 type PolymorphicComponentPropWithRef<
   Input extends AllowedElement,
@@ -117,10 +130,10 @@ type FormInputBareComponent = <
   Form extends FieldValues,
   Input extends AllowedElement = "input",
 >(
-  props: FormInputProps<Form, Input>,
+  props: FormInputProps<Form, Input> & Props,
 ) => ReactElement;
 
-export const FormInputBare = forwardRef(
+const FormInputComponent = forwardRef(
   <Form extends FieldValues, Input extends AllowedElement = "input">(
     {
       input,
@@ -193,6 +206,8 @@ export const FormInputBare = forwardRef(
       />
     );
   },
-) as FormInputBareComponent & FC;
+);
 
-FormInputBare.displayName = "FormInputBare";
+FormInputComponent.displayName = "FormInputBare";
+
+export const FormInputBare = FormInputComponent as FormInputBareComponent;
