@@ -44,9 +44,9 @@ const config: Config = {
   themeConfig: {
     image: "img/rhfi-social-card.png",
     navbar: {
-      title: "react-hook-form-input",
+      title: "hookform-input",
       logo: {
-        alt: "react-hook-form-input logo",
+        alt: "hookform-input logo",
         src: "img/rhfi-logo-background.png",
       },
       items: [
@@ -57,7 +57,7 @@ const config: Config = {
           label: "Docs",
         },
         {
-          href: "https://github.com/EmilMalanczak/react-hook-form-input",
+          href: "https://github.com/EmilMalanczak/hookform-input",
           label: "GitHub",
           position: "right",
         },
