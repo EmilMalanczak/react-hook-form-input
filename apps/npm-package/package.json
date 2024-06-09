@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "license": "MIT",
-  "name": "react-hook-form-input",
+  "name": "hookform-input",
   "author": "EmilMalanczak",
   "description": "Smart, polymorphic and typesafe Input component for react-hook-form",
   "keywords": [
@@ -9,9 +9,9 @@
     "react-hook-form",
     "utility"
   ],
-  "homepage": "https://github.com/EmilMalanczak/react-hook-form-input",
+  "homepage": "https://github.com/EmilMalanczak/hookform-input",
   "bugs": {
-    "url": "https://github.com/EmilMalanczak/react-hook-form-input"
+    "url": "https://github.com/EmilMalanczak/hookform-input"
   },
   "type": "module",
   "main": "./dist/index.umd.js",

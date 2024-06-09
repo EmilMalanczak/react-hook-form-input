@@ -14,11 +14,11 @@ Main purpose of this project is to make this pattern easy to integrate with your
 ## Getting started
 
 ```bash
-npm install react-hook-form-input
+npm install hookform-input
 
-yarn add react-hook-form-input
+yarn add hookform-input
 
-pnpm add react-hook-form-input
+pnpm add hookform-input
 ```
 
 ## Core
