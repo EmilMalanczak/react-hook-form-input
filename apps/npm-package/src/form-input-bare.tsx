@@ -123,6 +123,11 @@ export type FormInputProps<
   Input extends AllowedElement,
 > = PolymorphicComponentPropWithRef<Input, FormInputInternalOwnProps<Form>>;
 
+export type FormInputForwardedProps = UseControllerReturn & {
+  error?: string | null;
+  name: string;
+};
+
 /**
  * This is the type used in the type annotation for the component
  */
