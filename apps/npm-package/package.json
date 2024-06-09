@@ -6,7 +6,8 @@
   "description": "Smart, polymorphic and typesafe Input component for react-hook-form",
   "keywords": [
     "react",
-    "components"
+    "react-hook-form",
+    "utility"
   ],
   "homepage": "https://github.com/EmilMalanczak/react-hook-form-input",
   "bugs": {
