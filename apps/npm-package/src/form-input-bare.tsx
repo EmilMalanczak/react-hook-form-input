@@ -10,6 +10,7 @@ import type {
   Control,
   FieldValues,
   Path,
+  UseControllerProps,
   UseControllerReturn,
 } from "react-hook-form";
 import { forwardRef } from "react";
@@ -26,6 +27,12 @@ import { mergeRefs } from "./helpers/merge-refs";
 declare const emptyObjectSymbol: unique symbol;
 export type EmptyObject = { [emptyObjectSymbol]?: never };
 
+type PrefixedRecord<Obj, Prefix extends string> = {
+  [Key in keyof Obj as Key extends string
+    ? `${Prefix}${Capitalize<Key>}`
+    : never]: Obj[Key];
+};
+
 // TODO: add minimal props
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RequiredFormInputComponentProps = any;
@@ -35,9 +42,9 @@ export type AllowedElement = ElementType<
   "input" | "select" | "textarea"
 >;
 
-type Props = {
-  onChange?: (...args: unknown[]) => void;
-};
+// type Props = {
+// onChange?: (...args: unknown[]) => void;
+// };
 
 type PolymorphicProp<Input extends ElementType> = {
   /**
@@ -118,10 +125,16 @@ type PolymorphicComponentPropWithRef<
 export type PolymorphicRef<Input extends AllowedElement> =
   ComponentPropsWithRef<Input>["ref"];
 
+export type AdditionalControllerProps = PrefixedRecord<
+  Omit<UseControllerProps, "name" | "control">,
+  "_controller"
+>;
+
 export type FormInputProps<
   Form extends FieldValues,
   Input extends AllowedElement,
-> = PolymorphicComponentPropWithRef<Input, FormInputInternalOwnProps<Form>>;
+> = PolymorphicComponentPropWithRef<Input, FormInputInternalOwnProps<Form>> &
+  AdditionalControllerProps;
 
 export type FormInputForwardedProps = UseControllerReturn & {
   error?: string | null;
@@ -135,7 +148,7 @@ type FormInputBareComponent = <
   Form extends FieldValues,
   Input extends AllowedElement = "input",
 >(
-  props: FormInputProps<Form, Input> & Props,
+  props: FormInputProps<Form, Input>,
 ) => ReactElement;
 
 const FormInputComponent = forwardRef(
@@ -151,6 +164,10 @@ const FormInputComponent = forwardRef(
       alternativeErrorKeys,
       onChangeKey = "onChange",
       onBlurKey = "onBlur",
+      _controllerRules,
+      _controllerShouldUnregister,
+      _controllerDefaultValue,
+      _controllerDisabled,
       ...rest
     }: FormInputProps<Form, Input>,
     ref?: PolymorphicRef<Input>,
@@ -158,6 +175,10 @@ const FormInputComponent = forwardRef(
     const controller = useController<Form>({
       name,
       control,
+      rules: _controllerRules,
+      shouldUnregister: _controllerShouldUnregister,
+      defaultValue: _controllerDefaultValue,
+      disabled: _controllerDisabled,
     });
     const { field } = controller;
 
