@@ -13,7 +13,7 @@ export default defineConfig({
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
-      external: ["react", "react-dom", "react-hook-form"],
+      external: ["react", "react-hook-form"],
       output: {
         globals: {
           react: "React",
