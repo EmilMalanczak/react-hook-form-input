@@ -38,11 +38,6 @@
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf .turbo node_modules"
   },
-  "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-hook-form": "^7.51.5"
-  },
   "devDependencies": {
     "@types/node": "^20.13.0",
     "@types/react": "^18.2.66",
@@ -60,7 +55,10 @@
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.51.5"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
     "react-hook-form": "^7.51.5"
   },
   "eslintConfig": {

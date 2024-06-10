@@ -1,4 +1,4 @@
-import type { FC, ReactElement } from "react";
+import type { ReactElement } from "react";
 import type { FieldValues } from "react-hook-form";
 import { forwardRef } from "react";
 import { useFormContext } from "react-hook-form";
@@ -37,4 +37,4 @@ export const FormInputComponent = forwardRef(
 
 FormInputComponent.displayName = "FormInput";
 
-export const FormInput = FormInputComponent as FormInputComponent
+export const FormInput = FormInputComponent as FormInputComponent;

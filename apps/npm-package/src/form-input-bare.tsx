@@ -2,7 +2,6 @@ import type {
   ComponentPropsWithoutRef,
   ComponentPropsWithRef,
   ElementType,
-  FC,
   PropsWithChildren,
   ReactElement,
 } from "react";
