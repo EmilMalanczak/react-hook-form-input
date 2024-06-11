@@ -28,11 +28,12 @@
     border: none;
     border-radius: 0.5rem;
     padding-block: 0.5rem;
+    border-radius: var(--ifm-global-radius) !important;
   }
 
   & .tabs__item--active {
-    background-color: var(--ifm-tabs-color-active);
-    color: var(--rhfi-color-contrast);
+    background-color: var(--ifm-tabs-color-active) !important;
+    color: var(--rhfi-color-contrast) !important;
   }
 }
 
