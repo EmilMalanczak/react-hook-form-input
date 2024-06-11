@@ -11,6 +11,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--rhfi-paper-background);
 }
 
 .loader {
