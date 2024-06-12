@@ -3,14 +3,11 @@ import type { Config } from "@docusaurus/types";
 import { themes as prismThemes } from "prism-react-renderer";
 
 const config: Config = {
-  title: "My Site",
-  tagline: "Dinosaurs are cool",
+  title: "hookform-input",
+  tagline: "Documentation for the hookform-input package",
   favicon: "img/favicon.ico",
 
-  // Set the production url of your site here
-  url: "https://your-docusaurus-site.example.com",
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
+  url: "https://hookform-input-documentation-git-main-emilmalanczaks-projects.vercel.app",
   baseUrl: "/",
 
   onBrokenLinks: "throw",
@@ -28,10 +25,8 @@ const config: Config = {
         docs: {
           routeBasePath: "/",
           sidebarPath: "./sidebars.ts",
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+            "https://github.com/EmilMalanczak/hookform-input/tree/main/apps/documentation/",
         },
         blog: false,
         theme: {
