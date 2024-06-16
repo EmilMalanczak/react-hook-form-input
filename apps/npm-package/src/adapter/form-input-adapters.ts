@@ -9,6 +9,17 @@ export type FormInputForwardedProps<Form extends FieldValues = FieldValues> =
     onBlur: (...args: any[]) => void;
   };
 
+/**
+ * A function type that maps the forwarded props from react-hook-form
+ * to the component's props.
+ *
+ * @template ComponentProps - The type of the component's props.
+ * @template Form - The type of the form values.
+ *
+ * @param {FormInputForwardedProps<Form>} forwardedProps - The forwarded props from react-hook-form.
+ * @param {ComponentProps} otherProps - The standard props passed to the form input component.
+ * @returns {ComponentProps} The new props after transformFn.
+ */
 type MappingFunction<
   ComponentProps extends {},
   Form extends FieldValues = FieldValues,
@@ -19,7 +30,7 @@ type MappingFunction<
 
 type AdapterObject<ComponentProps extends {}> = {
   key: string;
-  mapping: MappingFunction<ComponentProps>;
+  transformFn: MappingFunction<ComponentProps>;
 };
 
 export const DEFAULT_ADAPTER_KEY = "_default";
@@ -30,26 +41,32 @@ class FormInputAdapters {
   constructor() {
     this.register({
       key: DEFAULT_ADAPTER_KEY,
-      mapping: (props) => props,
+      transformFn: (props) => props,
     });
   }
 
+  /**
+   * Registers a new adapter.
+   *
+   * @template ComponentProps - The type of the component's props.
+   * @param {AdapterObject<ComponentProps>} adapterObject - The adapter object containing key and transformFn function.
+   */
   public register<ComponentProps extends {}>({
-    /*
-     * @string key for the adapter
-     */
     key,
-    /*
-     * @function mapping function that will be called with value and base props
-     * @returns new props
-     * @param forwardedProps - forwarded props from hookform-input
-     * @param otherProps - props that are passed to the form input as standard props
-     */
-    mapping,
+    transformFn,
   }: AdapterObject<ComponentProps>) {
-    this.adapters.set(key, mapping);
+    this.adapters.set(key, transformFn);
   }
 
+  /**
+   * Retrieves an adapter by key.
+   *
+   * @template ComponentProps - The type of the component's props.
+   * @template Form - The type of the form values.
+   * @param {string} key - The unique key for the adapter.
+   * @returns {MappingFunction<ComponentProps, Form>} The transformFn function for the adapter.
+   * @throws {Error} If the adapter with the specified key is not found.
+   */
   public get<ComponentProps extends {}, Form extends FieldValues>(key: string) {
     const adapter = this.adapters.get(key);
 
@@ -62,10 +79,3 @@ class FormInputAdapters {
 }
 
 export const formInputAdapters = new FormInputAdapters();
-
-// formInputAdapters.register<CustomComponentProps>({
-//   key: "testAdapter",
-//   mapping: (props) => ({
-//     valueTest: props.value,
-//   }),
-// });

@@ -18,7 +18,6 @@ import { useController } from "react-hook-form";
 import {
   DEFAULT_ADAPTER_KEY,
   formInputAdapters,
-  FormInputForwardedProps,
 } from "./adapter/form-input-adapters";
 import { getErrorFromController } from "./helpers/get-error-from-controller";
 import { getErrorMessage } from "./helpers/get-error-message";
