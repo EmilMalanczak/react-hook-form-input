@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 import path from "node:path";
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
@@ -31,5 +33,10 @@ export default defineConfig({
   plugins: [react(), dts()],
   server: {
     port: 3003,
+  },
+  test: {
+    environment: "jsdom",
+    globals: true,
+    setupFiles: "./tests/setup.js",
   },
 });
