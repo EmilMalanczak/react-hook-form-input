@@ -14,9 +14,11 @@
     "lint:fix": "turbo lint --continue -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
     "lint:ws": "pnpm dlx sherif@latest",
     "postinstall": "pnpm lint:ws",
-    "npm:link": "turbo run link"
+    "npm:link": "turbo run link",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "husky": "^9.0.11",
     "turbo": "^2.0.1"
   },
   "packageManager": "pnpm@8.7.3",
