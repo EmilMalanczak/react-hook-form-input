@@ -1,19 +1,37 @@
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { promises as fsPromises } from "node:fs";
 
-// Construct __dirname in ES module scope
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+async function updateReadme() {
+  try {
+    // Read the contents of both files
+    const [sourceContent, destinationContent] = await Promise.all([
+      fsPromises.readFile(sourcePath, "utf8"),
+      fsPromises.readFile(destinationPath, "utf8"),
+    ]);
 
-// Define the source and destination paths
-const sourcePath = path.join(__dirname, "./apps/npm-package/README.md");
-const destinationPath = path.join(__dirname, "README.md");
+    // Compare the contents of the source and destination files
+    const shouldUpdateGit = sourceContent !== destinationContent;
 
-// Copy the file
-fs.copyFile(sourcePath, destinationPath, (err) => {
-  if (err) {
-    console.error("Error:", err);
+    if (!shouldUpdateGit) {
+      console.log("No changes detected in README.md. No update required.");
+
+      return;
+    }
+
+    // If different, copy the file
+    await copyFile(sourcePath, destinationPath);
+    console.log(`README.md has been copied to ${destinationPath}`);
+
+    // After copying, add the file to git
+    const addResult = await exec("git add README.md");
+    console.log(addResult.stdout);
+
+    // Commit the changes
+    const commitResult = await exec('git commit -m "chore: 🤖 sync README.md"');
+    console.log(commitResult.stdout);
+  } catch (error) {
+    console.error(`Error: ${error}`);
     process.exit(1);
   }
-  console.log(`README.md has been copied to ${destinationPath}`);
-});
+}
+
+updateReadme();
