@@ -1,8 +1,18 @@
 import { promises as fsPromises } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { exec as execCallback } from "node:child_process";
+import { promisify } from "node:util";
+
+const exec = promisify(execCallback);
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const sourcePath = path.join(__dirname, "../apps/npm-package/README.md");
+const destinationPath = path.join(__dirname, "../README.md");
 
 async function updateReadme() {
   try {
-    // Read the contents of both files
     const [sourceContent, destinationContent] = await Promise.all([
       fsPromises.readFile(sourcePath, "utf8"),
       fsPromises.readFile(destinationPath, "utf8"),
@@ -17,11 +27,9 @@ async function updateReadme() {
       return;
     }
 
-    // If different, copy the file
-    await copyFile(sourcePath, destinationPath);
+    await fsPromises.copyFile(sourcePath, destinationPath);
     console.log(`README.md has been copied to ${destinationPath}`);
 
-    // After copying, add the file to git
     const addResult = await exec("git add README.md");
     console.log(addResult.stdout);
 

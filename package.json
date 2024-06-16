@@ -16,7 +16,7 @@
     "postinstall": "pnpm lint:ws",
     "npm:link": "turbo run link",
     "prepare": "husky",
-    "update-readme": "node scripts/update-readme.js"
+    "update-readme": "node scripts/update-readme.mjs"
   },
   "devDependencies": {
     "husky": "^9.0.11",
