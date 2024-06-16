@@ -15,7 +15,8 @@
     "lint:ws": "pnpm dlx sherif@latest",
     "postinstall": "pnpm lint:ws",
     "npm:link": "turbo run link",
-    "prepare": "husky"
+    "prepare": "husky",
+    "update-readme": "node scripts/update-readme.js"
   },
   "devDependencies": {
     "husky": "^9.0.11",
