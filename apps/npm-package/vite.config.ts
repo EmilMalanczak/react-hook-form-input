@@ -38,7 +38,7 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./tests/setup.ts",
     coverage: {
-      exclude: ["**/index.ts"],
+      exclude: ["**/index.ts", "tests"],
     },
   },
 });
