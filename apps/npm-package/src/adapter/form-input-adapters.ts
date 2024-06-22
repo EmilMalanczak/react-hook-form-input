@@ -25,7 +25,7 @@ type MappingFunction<
   Form extends FieldValues = FieldValues,
 > = (
   forwardedProps: FormInputForwardedProps<Form>,
-  otherProps: ComponentProps,
+  otherProps?: ComponentProps,
 ) => ComponentProps;
 
 type AdapterObject<ComponentProps extends {}> = {
@@ -35,7 +35,7 @@ type AdapterObject<ComponentProps extends {}> = {
 
 export const DEFAULT_ADAPTER_KEY = "_default";
 
-class FormInputAdapters {
+export class FormInputAdapters {
   private adapters = new Map<string, MappingFunction<any>>();
 
   constructor() {
