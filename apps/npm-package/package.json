@@ -9,6 +9,10 @@
     "react-hook-form",
     "utility"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:EmilMalanczak/hookform-input.git"
+  },
   "homepage": "https://hookform-input-documentation-git-main-emilmalanczaks-projects.vercel.app/",
   "bugs": {
     "url": "https://github.com/EmilMalanczak/hookform-input"
