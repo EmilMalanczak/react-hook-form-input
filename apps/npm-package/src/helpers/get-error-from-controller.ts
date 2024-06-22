@@ -17,9 +17,11 @@ export const getErrorFromController = <Form extends FieldValues>(
 
   if (alternativeErrorKeys) {
     for (const key of alternativeErrorKeys) {
-      const value = getNestedValue(formState.errors, key);
+      const value = getNestedValue(formState.errors, key) as
+        | FieldError
+        | undefined;
 
-      if (value) return value as FieldError | undefined;
+      if (value) return value;
     }
   }
 

@@ -9,7 +9,7 @@ type GetIndexedField<T, K> = K extends keyof T
     : undefined;
 
 type FieldWithPossiblyUndefined<T, Key> =
-  | GFT<Exclude<T, undefined>, Key>
+  | GetNestedValue<Exclude<T, undefined>, Key>
   | Extract<T, undefined>;
 
 type IndexedFieldWithPossiblyUndefined<T, Key> =
@@ -29,7 +29,7 @@ type FieldIndex<
   ? FieldWithPossiblyUndefined<O[FieldKey], `[${Index}]${Rest}`>
   : undefined;
 
-type GFT<O, K> = K extends keyof O
+export type GetNestedValue<O, K> = K extends keyof O
   ? O[K]
   : K extends `${infer Left}.${infer Right}`
     ? Left extends keyof O
@@ -58,17 +58,20 @@ type GFT<O, K> = K extends keyof O
 export function getNestedValue<
   TData,
   TPath extends string,
-  TDefault = GFT<TData, TPath>,
+  TDefault = GetNestedValue<TData, TPath>,
 >(
   data: TData,
   path: TPath,
   defaultValue?: TDefault,
-): GFT<TData, TPath> | TDefault {
+): GetNestedValue<TData, TPath> | TDefault {
   const value = path
     .split(/[.[\]]/)
     .filter(Boolean)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-    .reduce<GFT<TData, TPath>>((val, key) => (val as any)?.[key], data as any);
+    .reduce<GetNestedValue<TData, TPath>>(
+      (val, key) => (val as any)?.[key],
+      data as any,
+    );
 
   return value ?? (defaultValue as TDefault);
 }
