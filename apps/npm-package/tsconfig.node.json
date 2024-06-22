@@ -5,7 +5,8 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
-    "strict": true
+    "strict": true,
+    "types": ["@testing-library/jest-dom/vitest"]
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "./tests/setup.ts"]
 }
