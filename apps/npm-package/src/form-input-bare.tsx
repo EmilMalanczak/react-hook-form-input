@@ -101,7 +101,7 @@ export type FormInputComponentProps<Form extends FieldValues> =
     name: string;
   };
 
-type ControlledInputPropsKeys = "onChange" | "value";
+type ControlledInputPropsKeys = "value";
 
 type PropsToOmit<C extends AllowedElement, P> = keyof (PolymorphicProp<C> & P) &
   keyof FormInputInternalOwnProps<EmptyObject> &
