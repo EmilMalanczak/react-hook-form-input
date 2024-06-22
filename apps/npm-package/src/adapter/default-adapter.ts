@@ -1,8 +1,8 @@
-import { AdapterObject, FormInputForwardedProps } from "./adapter-types";
+import { AdapterObject } from "./adapter-types";
 
 export const DEFAULT_ADAPTER_KEY = "_default";
 
-export const DEFAULT_ADAPTER: AdapterObject<FormInputForwardedProps> = {
+export const DEFAULT_ADAPTER: AdapterObject<{}> = {
   key: DEFAULT_ADAPTER_KEY,
-  transformFn: (props) => props,
+  transformFn: ({ field, fieldState, formState, ...inputProps }) => inputProps,
 };
