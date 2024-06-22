@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { getNestedValue } from "./get-nested-value";
 
-import { getNestedValue } from "../../src/helpers/get-nested-value";
 
 describe("getNestedValue", () => {
   const testData = {

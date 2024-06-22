@@ -9,8 +9,8 @@ import {
 import { useForm } from "react-hook-form";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { FormInputBare } from "../src/form-input-bare";
-import { renderWithUser } from "./render-with-user";
+import { FormInputBare } from "./form-input-bare";
+import { renderWithUser } from "./tests/render-with-user";
 
 const mocks = vi.hoisted(() => ({
   useController: vi.fn(),

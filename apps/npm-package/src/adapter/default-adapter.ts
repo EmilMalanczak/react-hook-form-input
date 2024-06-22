@@ -1,4 +1,4 @@
-import { AdapterObject } from "./adapter-types";
+import { AdapterObject } from "./form-input-adapter.types";
 
 export const DEFAULT_ADAPTER_KEY = "_default";
 

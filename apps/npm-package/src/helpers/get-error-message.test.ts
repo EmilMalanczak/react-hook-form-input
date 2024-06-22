@@ -1,7 +1,7 @@
 import { FieldError } from "react-hook-form";
 import { describe, expect, it } from "vitest";
 
-import { getErrorMessage } from "../../src/helpers/get-error-message";
+import { getErrorMessage } from "./get-error-message";
 
 describe("getErrorMessage", () => {
   it("returns null if error is undefined", () => {

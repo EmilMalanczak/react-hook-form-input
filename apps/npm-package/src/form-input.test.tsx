@@ -2,7 +2,7 @@ import { createRef } from "react";
 import { render } from "@testing-library/react";
 import { FormProvider, useForm } from "react-hook-form";
 
-import { FormInput } from "../src/form-input";
+import { FormInput } from "./form-input";
 
 describe("FormInput", () => {
   it("forwards ref correctly", () => {

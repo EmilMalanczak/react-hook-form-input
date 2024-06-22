@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { mergeRefs } from "../../src/helpers/merge-refs";
+import { mergeRefs } from "./merge-refs";
 
 describe("mergeRefs", () => {
   it("calls a function ref with the node", () => {

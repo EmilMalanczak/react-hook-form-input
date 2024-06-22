@@ -8,5 +8,5 @@
     "strict": true,
     "types": ["@testing-library/jest-dom/vitest"]
   },
-  "include": ["vite.config.ts", "./tests/setup.ts"]
+  "include": ["vite.config.ts", "src/tests/setup.ts"]
 }

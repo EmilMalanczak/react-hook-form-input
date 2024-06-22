@@ -1,7 +1,7 @@
 import { FieldValues } from "react-hook-form";
 
-import { AdapterObject, MappingFunction } from "./adapter-types";
 import { DEFAULT_ADAPTER } from "./default-adapter";
+import { AdapterObject, MappingFunction } from "./form-input-adapter.types";
 
 export class FormInputAdapters {
   private adapters = new Map<string, MappingFunction<any>>();

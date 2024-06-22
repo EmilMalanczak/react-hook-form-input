@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { FormInputForwardedProps } from "../../src/adapter/adapter-types";
-import { DEFAULT_ADAPTER_KEY } from "../../src/adapter/default-adapter";
-import { FormInputAdapters } from "../../src/adapter/form-input-adapters";
+import { DEFAULT_ADAPTER_KEY } from "./default-adapter";
+import { FormInputForwardedProps } from "./form-input-adapter.types";
+import { FormInputAdapters } from "./form-input-adapters";
 
 describe("FormInputAdapters", () => {
   let adapters: FormInputAdapters;

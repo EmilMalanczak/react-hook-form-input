@@ -89,7 +89,9 @@ type FormInputInternalOwnProps<Form extends FieldValues> = {
       @default "onBlur"      
     */
   onBlurKey?: string;
-
+  /** 
+      @string key to use for adapter
+    */
   adapterKey?: string;
 };
 

@@ -27,6 +27,6 @@
       "node_modules/@testing-library"
     ]
   },
-  "include": ["src", "tests", "tests/setup.ts"],
+  "include": ["src", "tests", "src/tests/setup.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

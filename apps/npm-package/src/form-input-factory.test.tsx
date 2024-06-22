@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
   createFormInput,
   createFormInputBare,
-} from "../src/form-input-factory";
+} from "./form-input-factory";
 
 describe("Form input factory", () => {
   const InputComponent = (props: any) => (

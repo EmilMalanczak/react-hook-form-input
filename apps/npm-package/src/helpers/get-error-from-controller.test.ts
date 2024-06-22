@@ -1,7 +1,7 @@
-import { get, UseControllerReturn } from "react-hook-form";
+import { UseControllerReturn } from "react-hook-form";
 import { describe, expect, it } from "vitest";
 
-import { getErrorFromController } from "../../src/helpers/get-error-from-controller";
+import { getErrorFromController } from "./get-error-from-controller";
 
 describe("getErrorFromController", () => {
   it("should return fieldState error if its truthy", () => {
