@@ -15,10 +15,8 @@ import type {
 import { forwardRef } from "react";
 import { useController } from "react-hook-form";
 
-import {
-  DEFAULT_ADAPTER_KEY,
-  formInputAdapters,
-} from "./adapter/form-input-adapters";
+import { DEFAULT_ADAPTER_KEY } from "./adapter/default-adapter";
+import { formInputAdapters } from "./adapter/form-input-adapters";
 import { getErrorFromController } from "./helpers/get-error-from-controller";
 import { getErrorMessage } from "./helpers/get-error-message";
 import { mergeRefs } from "./helpers/merge-refs";
