@@ -12,18 +12,21 @@
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "removeComments": false,
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-
-    "typeRoots": ["./dist/index.d.ts", "node_modules/@types"]
+    "typeRoots": [
+      "./dist/index.d.ts",
+      "node_modules/@types",
+      "node_modules/@testing-library"
+    ]
   },
-  "include": ["src", "./index.ts"],
+  "include": ["src", "tests", "src/tests/setup.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

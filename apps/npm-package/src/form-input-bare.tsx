@@ -15,6 +15,8 @@ import type {
 import { forwardRef } from "react";
 import { useController } from "react-hook-form";
 
+import { DEFAULT_ADAPTER_KEY } from "./adapter/default-adapter";
+import { formInputAdapters } from "./adapter/form-input-adapters";
 import { getErrorFromController } from "./helpers/get-error-from-controller";
 import { getErrorMessage } from "./helpers/get-error-message";
 import { mergeRefs } from "./helpers/merge-refs";
@@ -87,6 +89,10 @@ type FormInputInternalOwnProps<Form extends FieldValues> = {
       @default "onBlur"      
     */
   onBlurKey?: string;
+  /** 
+      @string key to use for adapter
+    */
+  adapterKey?: string;
 };
 
 export type FormInputComponentProps<Form extends FieldValues> =
@@ -95,7 +101,7 @@ export type FormInputComponentProps<Form extends FieldValues> =
     name: string;
   };
 
-type ControlledInputPropsKeys = "onChange" | "value";
+type ControlledInputPropsKeys = "value";
 
 type PropsToOmit<C extends AllowedElement, P> = keyof (PolymorphicProp<C> & P) &
   keyof FormInputInternalOwnProps<EmptyObject> &
@@ -135,11 +141,6 @@ export type FormInputProps<
 > = PolymorphicComponentPropWithRef<Input, FormInputInternalOwnProps<Form>> &
   AdditionalControllerProps;
 
-export type FormInputForwardedProps = UseControllerReturn & {
-  error?: string | null;
-  name: string;
-};
-
 /**
  * This is the type used in the type annotation for the component
  */
@@ -167,6 +168,7 @@ const FormInputComponent = forwardRef(
       _controllerShouldUnregister,
       _controllerDefaultValue,
       _controllerDisabled,
+      adapterKey = DEFAULT_ADAPTER_KEY,
       ...rest
     }: FormInputProps<Form, Input>,
     ref?: PolymorphicRef<Input>,
@@ -179,55 +181,54 @@ const FormInputComponent = forwardRef(
       defaultValue: _controllerDefaultValue,
       disabled: _controllerDisabled,
     });
-    const { field } = controller;
-
-    const { onChange, onBlur, ref: hookFormRef, value } = field;
+    const { onChange, onBlur, ref: hookFormRef, value } = controller.field;
 
     const error = getErrorFromController(controller, alternativeErrorKeys);
 
     const InputComponent = input ?? "input";
 
+    const adapter = formInputAdapters.get<typeof rest, Form>(adapterKey);
+
+    const propsObject = {
+      value,
+      name,
+      error: error ? getErrorMessage(error) : undefined,
+      onChange: (...values: unknown[]) => {
+        onChange(...values);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        onInputComponentChange?.(...values);
+
+        // TODO: unsure if this is needed
+        // if (getNestedValue(touchedFields, name) || Boolean(error)) {
+        //   trigger(name);
+        // }
+
+        if (debug) {
+          console.info(
+            `%cForm input onChange`,
+            "color: #7b7bed; display: block; width: 100%; margin-bottom: 8px;",
+            `\ninput name: ${name}`,
+            {
+              values,
+              name,
+              error,
+              field: controller.field,
+            },
+          );
+        }
+      },
+      onBlur: (...values: unknown[]) => {
+        onBlur();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        onInputComponentBlur?.(...values);
+      },
+      ...controller,
+    };
+
     return (
       <InputComponent
-        {...rest}
         ref={mergeRefs(hookFormRef, ref)}
-        {...{
-          [valueKey]: value,
-          name,
-          error: error ? getErrorMessage(error) : undefined,
-          // NOTE: don't know how to type this properly but types are correct in the end
-          [onChangeKey]: (...values: unknown[]) => {
-            onChange(...values);
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-            onInputComponentChange?.(...values);
-
-            // TODO: unsure if this is needed
-            // if (getNestedValue(touchedFields, name) || Boolean(error)) {
-            //   trigger(name);
-            // }
-
-            if (debug) {
-              console.info(
-                `%cForm input onChange`,
-                "color: #7b7bed; display: block; width: 100%; margin-bottom: 8px;",
-                `\ninput name: ${name}`,
-                {
-                  values,
-                  name,
-                  error,
-                  field,
-                },
-              );
-            }
-          },
-          // NOTE: don't know how to type this properly but types are correct in the end
-          [onBlurKey]: (...values: unknown[]) => {
-            onBlur();
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-            onInputComponentBlur?.(...values);
-          },
-          ...controller,
-        }}
+        {...adapter(propsObject, rest)}
       />
     );
   },

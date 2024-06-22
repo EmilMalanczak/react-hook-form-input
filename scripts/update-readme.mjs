@@ -1,10 +1,6 @@
 import { promises as fsPromises } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { exec as execCallback } from "node:child_process";
-import { promisify } from "node:util";
-
-const exec = promisify(execCallback);
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -30,11 +26,13 @@ async function updateReadme() {
     await fsPromises.copyFile(sourcePath, destinationPath);
     console.log(`README.md has been copied to ${destinationPath}`);
 
-    const addResult = await exec("git add README.md");
+    const addResult = await fsPromises.exec("git add README.md");
     console.log(addResult.stdout);
 
     // Commit the changes
-    const commitResult = await exec('git commit -m "chore: 🤖 sync README.md"');
+    const commitResult = await fsPromises.exec(
+      'git commit -m "chore: 🤖 sync README.md"'
+    );
     console.log(commitResult.stdout);
   } catch (error) {
     console.error(`Error: ${error}`);
