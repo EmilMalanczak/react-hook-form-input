@@ -1,0 +1,98 @@
+---
+sidebar_position: 4
+---
+
+# Input adapter
+
+To make integration with different UI libraries easier, you can use the `formInputAdapters` object to register custom input adapters.
+It is simple implementation of Adapter Pattern that allows you to transform the props passed to the `hookform-input` component to match the expected format of the UI library or your actual components that you are using without unnessesary refactor or adjustments.
+
+## API
+
+`formInputAdapters` exposes a single method `register` that accepts an object with the following properties:
+
+- `key` - a unique key that identifies the adapter
+- `transformFn` - a function that accepts the props passed to the `hookform-input` component and the original props and returns the transformed props
+
+There is preregistered adapter that is used by default - `_default`. It cuts down some of the data that is passed from `hookform-input` to the input component related to the field state and form state coming from the `react-hook-form` library.
+While most of the reusable components are using spread operator to pass the props to the input component it could be a problem spread a whole `formState` object on the html tag.
+
+#### Ignored props:
+
+- `fieldState` - state of input which might be useful for some additional UI styles / validation logic. It contains:
+
+type definition for the `fieldState` object:
+
+```ts
+type ControllerFieldState = {
+  invalid: boolean;
+  isTouched: boolean;
+  isDirty: boolean;
+  isValidating: boolean;
+  error?: FieldError;
+};
+```
+
+- `formState` - whole state of the form context that the input is rendered in
+- `field` - object containing all the input props eg. `onChange`, `name`
+
+### Default adapater implementation
+
+```tsx
+formInputAdapters.register({
+  key: "_default",
+  transformFn: ({ field, fieldState, formState, ...inputProps }) => inputProps,
+});
+```
+
+## Usage
+
+For example if you are using a Material UI library - [`TextField`](https://mui.com/material-ui/react-text-field/) component receives slightly different props than `hookform-input` provides.
+
+We pass `error` as a string meant to be used as an error message, but Material UI expects it a boolean and the message is passed additionally as a `helperText`.
+To make this work, we can register an adapter that transforms the props to match the expected format.
+
+```tsx
+import { formInputAdapters } from "hookform-input";
+
+formInputAdapters.register({
+  key: "MUI-TextField",
+  transformFn: (props, originalProps) => ({
+    ...props,
+    error: !!props.error,
+    helperText: props.error ?? originalProps?.description,
+  }),
+});
+```
+
+Now, when you use the `hookform-input` with the `MUI-TextField` key, the props will be transformed to match the expected format.
+
+```tsx
+import TextField from "@mui/material/TextField";
+import { useForm } from "react-hook-form";
+
+const Component = () => {
+  const form = useForm({
+    defaultValues: {
+      text: "some value",
+    },
+  });
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
+  return (
+    <form onSubmit={format.handleSubmit(onSubmit)}>
+      <FormInputBare
+        name="text"
+        input={TextField}
+        adapterKey="MUI-TextField"
+        control={form.control}
+      />
+
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
+```
