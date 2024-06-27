@@ -4,6 +4,17 @@ import { DEFAULT_ADAPTER_KEY } from "./default-adapter";
 import { FormInputForwardedProps } from "./form-input-adapter.types";
 import { FormInputAdapters } from "./form-input-adapters";
 
+declare global {
+  interface FormInputAdapterKeys {
+    testAdapter1: {
+      error: string;
+    };
+    testAdapter2: FormInputForwardedProps & {
+      something: string;
+    };
+  }
+}
+
 describe("FormInputAdapters", () => {
   let adapters: FormInputAdapters;
 
@@ -18,11 +29,14 @@ describe("FormInputAdapters", () => {
   });
 
   it("registers and retrieves a new adapter successfully", () => {
-    const adapterKey = "testAdapter";
+    const adapterKey = "testAdapter1";
 
     adapters.register({
       key: adapterKey,
-      transformFn: (props) => ({ ...props, modified: true }),
+      transformFn: (props, originalProps) => ({
+        error: props.error ? "There is an error" : "",
+        ...originalProps,
+      }),
     });
 
     const adapter = adapters.get(adapterKey);
@@ -31,11 +45,14 @@ describe("FormInputAdapters", () => {
   });
 
   it("retrieved adapter transforms data as the given transformFn", () => {
-    const adapterKey = "testAdapter";
+    const adapterKey = "testAdapter2";
 
     adapters.register({
       key: adapterKey,
-      transformFn: (props) => ({ ...props, modified: true }),
+      transformFn: (props) => ({
+        ...props,
+        something: "test",
+      }),
     });
 
     const forwardedProps = {
@@ -46,12 +63,13 @@ describe("FormInputAdapters", () => {
 
     expect(adapter(forwardedProps)).toEqual({
       ...forwardedProps,
-      modified: true,
+      something: "test",
     });
   });
 
   it("throws an error when trying to get a non-existent adapter", () => {
     const attemptToGetNonExistentAdapter = () =>
+      // @ts-expect-error - non existing key
       adapters.get("nonExistentAdapter");
 
     expect(attemptToGetNonExistentAdapter).toThrowError(

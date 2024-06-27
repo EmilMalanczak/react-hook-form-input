@@ -1,5 +1,14 @@
 import { FieldValues, UseControllerReturn } from "react-hook-form";
 
+declare global {
+  export interface FormInputAdapterKeys {
+    _default: Omit<
+      FormInputForwardedProps,
+      "field" | "fieldState" | "formState"
+    >;
+  }
+}
+
 export type FormInputForwardedProps<Form extends FieldValues = FieldValues> =
   UseControllerReturn<Form> & {
     error?: string | null;
@@ -21,14 +30,34 @@ export type FormInputForwardedProps<Form extends FieldValues = FieldValues> =
  * @returns {ComponentProps} The new props after transformFn.
  */
 export type MappingFunction<
-  ComponentProps extends {},
+  InputProps extends {},
   Form extends FieldValues = FieldValues,
+  OutputProps extends {} = InputProps,
 > = (
   forwardedProps: FormInputForwardedProps<Form>,
-  otherProps?: ComponentProps,
-) => ComponentProps;
+  otherProps?: InputProps,
+) => OutputProps;
 
-export type AdapterObject<ComponentProps extends {}> = {
-  key: string;
-  transformFn: MappingFunction<ComponentProps>;
-};
+// TODO: make it working without the need to declare global interface
+export type GlobalAdapterProps<
+  Key extends keyof FormInputAdapterKeys,
+  InputType extends "input" | "output",
+> = FormInputAdapterKeys[Key] extends {
+  input: infer InputProps extends {};
+  output: infer OutputProps extends {};
+}
+  ? InputType extends "input"
+    ? InputProps
+    : OutputProps
+  : FormInputAdapterKeys[Key];
+
+export type AdapterObject = {
+  [AdapterKey in keyof FormInputAdapterKeys]: {
+    key: AdapterKey;
+    transformFn: MappingFunction<
+      GlobalAdapterProps<AdapterKey, "input">,
+      FieldValues,
+      GlobalAdapterProps<AdapterKey, "output">
+    >;
+  };
+}[keyof FormInputAdapterKeys];

@@ -14,6 +14,7 @@ import type {
 } from "react-hook-form";
 import { forwardRef } from "react";
 import { useController } from "react-hook-form";
+import { EmptyObject } from "type-fest";
 
 import { DEFAULT_ADAPTER_KEY } from "./adapter/default-adapter";
 import { formInputAdapters } from "./adapter/form-input-adapters";
@@ -22,11 +23,6 @@ import { getErrorMessage } from "./helpers/get-error-message";
 import { mergeRefs } from "./helpers/merge-refs";
 
 // NOTE: ElementType accept object with minimal props to pass
-
-// https://github.com/sindresorhus/type-fest/blob/main/source/empty-object.d.ts
-// When you annotate something as the type `{}`, it can be anything except `null` and `undefined`. This means that you cannot use `{}` to represent an empty plain object ([read more](https://stackoverflow.com/questions/47339869/typescript-empty-object-and-any-difference/52193484#52193484)).
-declare const emptyObjectSymbol: unique symbol;
-export type EmptyObject = { [emptyObjectSymbol]?: never };
 
 type PrefixedRecord<Obj, Prefix extends string> = {
   [Key in keyof Obj as Key extends string
@@ -92,7 +88,7 @@ type FormInputInternalOwnProps<Form extends FieldValues> = {
   /** 
       @string key to use for adapter
     */
-  adapterKey?: string;
+  adapterKey?: keyof FormInputAdapterKeys;
 };
 
 export type FormInputComponentProps<Form extends FieldValues> =
@@ -187,7 +183,7 @@ const FormInputComponent = forwardRef(
 
     const InputComponent = input ?? "input";
 
-    const adapter = formInputAdapters.get<typeof rest, Form>(adapterKey);
+    const adapter = formInputAdapters.get<Form, typeof adapterKey>(adapterKey);
 
     const propsObject = {
       value,
@@ -228,7 +224,8 @@ const FormInputComponent = forwardRef(
     return (
       <InputComponent
         ref={mergeRefs(hookFormRef, ref)}
-        {...adapter(propsObject, rest)}
+        // TODO: improve this
+        {...adapter(propsObject, rest as any)}
       />
     );
   },
