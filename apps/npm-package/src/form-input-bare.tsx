@@ -20,6 +20,7 @@ import { DEFAULT_ADAPTER_KEY } from "./adapter/default-adapter";
 import { formInputAdapters } from "./adapter/form-input-adapters";
 import { getErrorFromController } from "./helpers/get-error-from-controller";
 import { getErrorMessage } from "./helpers/get-error-message";
+import { logInputEvent } from "./helpers/log-input-event";
 import { mergeRefs } from "./helpers/merge-refs";
 
 // NOTE: ElementType accept object with minimal props to pass
@@ -200,23 +201,27 @@ const FormInputComponent = forwardRef(
         // }
 
         if (debug) {
-          console.info(
-            `%cForm input onChange`,
-            "color: #7b7bed; display: block; width: 100%; margin-bottom: 8px;",
-            `\ninput name: ${name}`,
-            {
-              values,
-              name,
-              error,
-              field: controller.field,
-            },
-          );
+          logInputEvent("onChange", name, {
+            values,
+            name,
+            error,
+            field: controller.field,
+          });
         }
       },
       onBlur: (...values: unknown[]) => {
         onBlur();
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         onInputComponentBlur?.(...values);
+
+        if (debug) {
+          logInputEvent("onBlur", name, {
+            values,
+            name,
+            error,
+            field: controller.field,
+          });
+        }
       },
       ...controller,
     };
